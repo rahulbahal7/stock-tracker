@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<title>Stock Tracker</title>
+		
+		<script type="text/javascript" src="jquery-1.3.min.js"></script>
+		
+		<script>
+		
+		var stockURL = "stock-ticker.php?tickers=";
+		
+		var stockTickers = new Array();
+		
+		$(document).ready(function(){
+				
+			$("#addStockBtn").click(function(e){
+			
+				var stock = $("#stock").val();
+				
+				$.get(stockURL + stock, function(data){
+					
+					var linesOfData = data.split('\n');
+					
+					$("#stocks").empty();					
+					$("#stocks").append("<thead><td>Stock</td><td>Open</td><td>Dividend</td><td>Ex-Divident Date</td><td>Pay Date</td><td>Change(%)</td><td>Net Change(%)</td></thead>");
+					
+					for(i=0; i < linesOfData.length-1; i++)
+					{
+					
+	var lineOfData = linesOfData[i].split(',');
+						$("#stocks").append("<tr><td>" + String(lineOfData[0]).replace(/\"/g, '') + "</td><td>" + lineOfData[1] + "</td><td>" +  +  lineOfData[2] + "</td><td>" + String(lineOfData[3]).replace(/\"/g, '') + "</td><td>" + String(lineOfData[4]).replace(/\"/g, '') + "</td><td>" + String(lineOfData[5]).replace(/\"/g, '') + "</td><td>" + String(lineOfData[6]).replace(/\"/g, '') + "</td></tr>");
+
+					}				
+					
+				});
+			
+			});
+		
+		});
+		
+		</script>
+		
+		<style type="text/css">
+		
+		#stocks {
+			width: 600px;
+		}
+		#stocks thead {
+			font-weight: bold;
+		}
+		
+		#add-stock {
+			margin-bottom: 10px;
+			background-color: #eeeeee;
+			padding: 10px;
+		}
+		
+		</style>
+		
+	</head>
+	<body>
+	
+	<h2>Stock Tracker</h2>
+	
+	<form id="add-stock">
+		<input type="text" id="stock" name="stock" value="enp,clmt,mvo,whx,ston,pse,vlccf,nmm,cpno,vnr" />
+		<input type="button" value="Get Stock Data" id="addStockBtn" />
+		<small>( Separate multiple stock symbols with "," )
+	</form>
+	
+	<table id="stocks">
+		<tr>
+			<td colspan="3">Enter a stock symbol above to begin searching.</td>
+		</tr>
+	</table>
+		
+	</body>
+</html>
